@@ -1,4 +1,3 @@
-
 resource "helm_release" "weaviate" {
   name             = "weaviate"
   namespace        = "weaviate"
@@ -43,6 +42,16 @@ resource "helm_release" "weaviate" {
         enabled = true
       }
 
+      resources = {
+        requests = {
+          cpu    = "500m"
+          memory = "2Gi"
+        }
+
+        limits = {
+          cpu    = "2"
+          memory = "4Gi"
+        }
       }
     })
   ]
