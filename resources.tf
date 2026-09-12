@@ -37,14 +37,14 @@ module "grafana" {
   depends_on = [module.prometheus]
 }
 
-module "sonarqube" {
-  source = "./modules/sonarqube"
+module "weaviate" {
+  source = "./modules/weaviate"
   depends_on = [module.grafana]
 }
 
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.sonarqube]
+  depends_on = [module.weaviate]
 }
 
 
