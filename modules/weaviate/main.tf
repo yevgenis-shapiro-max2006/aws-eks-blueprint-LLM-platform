@@ -8,49 +8,42 @@ resource "helm_release" "weaviate" {
   chart      = "weaviate"
   version    = "17.5.1"
 
-  timeout          = 1200
-  atomic           = true
-  cleanup_on_fail  = true
-  wait             = true
+  timeout         = 1200
+  atomic          = true
+  cleanup_on_fail = true
+  wait            = true
 
-  set {
-    name  = "replicas"
-    value = "3"
-  }
+  values = [
+    yamlencode({
+      replicas            = 3
+      podManagementPolicy  = "Parallel"
 
-  set {
-    name  = "podManagementPolicy"
-    value = "Parallel"
-  }
+      service = {
+        type = "ClusterIP"
+      }
 
-  set {
-    name  = "service.type"
-    value = "ClusterIP"
-  }
+      grpcService = {
+        type = "ClusterIP"
+      }
 
-  set {
-    name  = "grpcService.type"
-    value = "ClusterIP"
-  }
+      storage = {
+        size             = "10Gi"
+        storageClassName = "gp3"
+      }
 
-  set {
-    name  = "storage.size"
-    value = "10Gi"
-  }
+      authentication = {
+        anonymous_access = {
+          enabled = true
+        }
+      }
 
-  set {
-    name  = "authentication.anonymous_access.enabled"
-    value = "true"
-  }
+      logLevel = "info"
 
-  set {
-    name  = "logLevel"
-    value = "info"
-  }
+      serviceMonitor = {
+        enabled = true
+      }
 
-  set {
-    name  = "serviceMonitor.enabled"
-    value = "true"
-  }
+      }
+    })
+  ]
 }
-
